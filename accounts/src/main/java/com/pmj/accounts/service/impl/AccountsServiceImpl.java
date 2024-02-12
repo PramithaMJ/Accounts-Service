@@ -1,10 +1,13 @@
 package com.pmj.accounts.service.impl;
 
 import com.pmj.accounts.constants.AccountsConstants;
+import com.pmj.accounts.dto.AccountsDTO;
 import com.pmj.accounts.dto.CustomerDTO;
 import com.pmj.accounts.entity.Accounts;
 import com.pmj.accounts.entity.Customer;
 import com.pmj.accounts.exception.CustomerAlreadyExistsException;
+import com.pmj.accounts.exception.ResourceNotFoundException;
+import com.pmj.accounts.mapper.AccountsMapper;
 import com.pmj.accounts.mapper.CustomerMapper;
 import com.pmj.accounts.repository.AccountsRepository;
 import com.pmj.accounts.repository.CustomerRepository;
@@ -41,7 +44,6 @@ public class AccountsServiceImpl implements IAccountService {
         customer.setCreatedBy("Anonymous");
         Customer savedCustomer = customerRepository.save(customer);
         accountsRepository.save(createNewAccount(savedCustomer));
-
     }
 
     /**
@@ -61,4 +63,19 @@ public class AccountsServiceImpl implements IAccountService {
 
         return newAccount;
     }
+
+    @Override
+    public CustomerDTO fetchAccount(String mobileNumber) {
+        Customer customer = customerRepository.findAllByMobileNumber(mobileNumber).orElseThrow(
+                ()-> new ResourceNotFoundException("Customer","mobileNumber",mobileNumber)
+        );
+
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
+                () -> new ResourceNotFoundException("Account","customerId",customer.getCustomerId().toString())
+        );
+        CustomerDTO customerDTO = CustomerMapper.mapToCustomerDto(customer,new CustomerDTO());
+        customerDTO.setAccountsDTO(AccountsMapper.mapToAccountsDto(accounts, new AccountsDTO()));
+        return customerDTO;
+    }
+
 }
