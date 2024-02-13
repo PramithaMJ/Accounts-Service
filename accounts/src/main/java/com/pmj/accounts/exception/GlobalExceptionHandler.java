@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(CustomerAlreadyExistsException exception,
+    public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                                  WebRequest webRequest){
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false),

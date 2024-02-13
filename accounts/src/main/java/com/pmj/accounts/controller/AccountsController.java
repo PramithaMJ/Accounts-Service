@@ -4,8 +4,10 @@ import com.pmj.accounts.constants.AccountsConstants;
 import com.pmj.accounts.dto.CustomerDTO;
 import com.pmj.accounts.dto.ResponseDTO;
 import com.pmj.accounts.service.IAccountService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,4 +35,17 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(customerDTO);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDTO> updateAccountDetails(@Valid @RequestBody CustomerDTO customerDTO) {
+        boolean isUpdated = iAccountService.updateAccount(customerDTO);
+        if(isUpdated) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDTO(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDTO(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_UPDATE));
+        }
+    }
 }
