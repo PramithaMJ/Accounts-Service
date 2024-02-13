@@ -21,9 +21,14 @@ public interface IAccountService {
     /**
      * Create account
      * @param  customerDTO - customerDTO Object
-     * @return boolean indicating if the update a account details success or not
+     * @return boolean indicating if the update account details success or not
      */
     boolean updateAccount(CustomerDTO customerDTO);
 
-
+    /**
+     * Create account
+     * @param  mobileNUmber - Input mobile number
+     * @return boolean indicating if delete of account details success or not
+     */
+    boolean deleteAccount(String mobileNUmber);
 }
