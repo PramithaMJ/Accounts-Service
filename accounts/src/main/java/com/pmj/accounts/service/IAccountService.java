@@ -8,7 +8,7 @@ public interface IAccountService {
      * Create account
      * @param  customerDTO - customerDTO Object
      */
-    void createAccoun(CustomerDTO customerDTO);
+    void createAccount(CustomerDTO customerDTO);
 
     /**
      * Create account
